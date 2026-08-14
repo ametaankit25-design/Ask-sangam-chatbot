@@ -1,0 +1,300 @@
+/* ============================================================
+   Ask Sangam – Global Design System
+   ============================================================ */
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---------- Design Tokens ---------- */
+:root {
+  --bg:               #09090b;
+  --surface:          #0c0c0f;
+  --surface-c:        #121215;
+  --surface-c-low:    #0f0f12;
+  --surface-c-lowest: #09090b;
+  --surface-c-high:   #18181b;
+  --surface-c-highest:#1e1e22;
+  --surface-variant:  #18181b;
+  --on-surface:       #fafafa;
+  --on-surface-var:   #a1a1aa;
+  --outline:          #52525b;
+  --outline-var:      #27272a;
+  --primary:          #a78bfa;
+  --on-primary:       #0a0012;
+  --primary-container:#7c3aed;
+  --secondary:        #71717a;
+  --tertiary:         #34d399;
+  --error:            #ef4444;
+
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-full:9999px;
+
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  color-scheme: dark;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* full-height on mobile */
+  min-height: 100%;
+  height: 100%;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- Typography resets ---------- */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+p { margin: 0; }
+
+/* ---------- Scrollbar hide utility ---------- */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ---------- Button base reset ---------- */
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  padding: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Input base ---------- */
+input, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: inherit;
+}
+
+/* ---------- Focus ring ---------- */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ---------- Page layout ---------- */
+.page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  /* safe area for notch & home-bar */
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ---------- App shell ---------- */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ---------- Top bar ---------- */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+  height: 56px;
+  border-bottom: 1px solid var(--outline-var);
+  background: var(--bg);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* ---------- Bottom Nav ---------- */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  border-top: 1px solid var(--outline-var);
+  background: var(--bg);
+  flex-shrink: 0;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.bottom-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  flex: 1;
+  height: 100%;
+  transition: opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-nav-btn:active { opacity: 0.7; }
+
+.bottom-nav-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  transition: background 0.2s;
+}
+
+.bottom-nav-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Desktop Sidebar (≥768px) ---------- */
+@media (min-width: 768px) {
+  .app-shell {
+    flex-direction: row;
+  }
+
+  .bottom-nav { display: none; }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 240px;
+    border-right: 1px solid var(--outline-var);
+    background: var(--bg);
+    padding: 24px 12px;
+    flex-shrink: 0;
+    gap: 4px;
+  }
+
+  .sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px 24px;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--on-surface);
+  }
+
+  .sidebar-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    color: var(--on-surface-var);
+    width: 100%;
+    text-align: left;
+  }
+
+  .sidebar-btn:hover {
+    background: var(--surface-c-high);
+    color: var(--on-surface);
+  }
+
+  .sidebar-btn.active {
+    background: rgba(167, 139, 250, 0.1);
+    color: var(--primary);
+  }
+
+  .main-content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 767px) {
+  .sidebar { display: none; }
+  .main-content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+}
+
+/* ---------- Scroll area ---------- */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ---------- Animations ---------- */
+@keyframes bounce-dot {
+  0%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-6px); }
+}
+
+.dot-bounce { animation: bounce-dot 1.2s infinite ease-in-out; }
+
+/* Page fade-in */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+/* ---------- Card ---------- */
+.card {
+  background: var(--surface-c);
+  border: 1px solid var(--outline-var);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 0 0 1px var(--outline); }
+
+/* ---------- Utility ---------- */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
