@@ -47,10 +47,16 @@ elif [ "$OS" = "amzn" ] || [ "$OS" = "almalinux" ] || [ "$OS" = "rhel" ] || [ "$
     sudo dnf update -y || sudo yum update -y
     sudo dnf install -y docker git || sudo yum install -y docker git
     
-    # Install Docker compose plugin
+    # Install Docker Compose & Docker Buildx plugins
     sudo mkdir -p /usr/local/lib/docker/cli-plugins
     sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/lib/docker/cli-plugins/docker-compose
     sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+    BUILDX_ARCH=$(uname -m)
+    [ "$BUILDX_ARCH" = "x86_64" ] && BUILDX_ARCH="amd64"
+    [ "$BUILDX_ARCH" = "aarch64" ] && BUILDX_ARCH="arm64"
+    sudo curl -SL "https://github.com/docker/buildx/releases/latest/download/buildx-linux-${BUILDX_ARCH}" -o /usr/local/lib/docker/cli-plugins/docker-buildx
+    sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-buildx
 fi
 
 # Enable and start Docker service
