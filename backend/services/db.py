@@ -72,23 +72,27 @@ def init_db() -> None:
 
 
 def seed_default_users() -> None:
-    """Seed initial default accounts if database has no users."""
-    with get_db_connection() as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT COUNT(*) FROM users")
-        if cursor.fetchone()[0] == 0:
-            now = datetime.now(timezone.utc).isoformat()
-            default_accounts = [
-                ("usr-admin", "admin", "admin@sangam.edu.in", generate_password_hash("AdminPass123!"), ROLE_ADMIN, now),
-                ("usr-faculty", "faculty_user", "faculty@sangam.edu.in", generate_password_hash("FacultyPass123!"), ROLE_FACULTY, now),
-                ("usr-student", "alex_mercer", "alex@sangam.edu.in", generate_password_hash("StudentPass123!"), ROLE_STUDENT, now),
-            ]
-            cursor.executemany(
-                "INSERT INTO users (id, username, email, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
-                default_accounts
-            )
-            conn.commit()
-            print(f"[Database] SQLite DB initialized at {DATABASE_PATH} with seeded demo users.")
+    """Seed initial default accounts safely across concurrent Gunicorn workers."""
+    try:
+        with get_db_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM users")
+            if cursor.fetchone()[0] == 0:
+                now = datetime.now(timezone.utc).isoformat()
+                default_accounts = [
+                    ("usr-admin", "admin", "admin@sangam.edu.in", generate_password_hash("AdminPass123!"), ROLE_ADMIN, now),
+                    ("usr-faculty", "faculty_user", "faculty@sangam.edu.in", generate_password_hash("FacultyPass123!"), ROLE_FACULTY, now),
+                    ("usr-student", "alex_mercer", "alex@sangam.edu.in", generate_password_hash("StudentPass123!"), ROLE_STUDENT, now),
+                ]
+                cursor.executemany(
+                    "INSERT OR IGNORE INTO users (id, username, email, password_hash, role, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                    default_accounts
+                )
+                conn.commit()
+                print(f"[Database] SQLite DB initialized at {DATABASE_PATH} with seeded demo users.")
+    except sqlite3.IntegrityError:
+        # Another worker already inserted default users concurrently
+        pass
 
 
 def get_db_type() -> str:
